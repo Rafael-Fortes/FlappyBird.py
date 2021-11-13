@@ -5,6 +5,8 @@ from sys import exit
 
 class Game:
     def __init__(self, width, height):
+        # initialize all objects and variables
+
         self.screen = pygame.display.set_mode((width, height))
         self.bg = background.BackGround()
         self.floor = floor.Floor(height-150)
@@ -17,35 +19,49 @@ class Game:
 
         self.score = 0
         self.score_text = text.Text()
+
+        self.running = False
         
 
     def draw(self):
+        # draws all objects
+
         self.bg.draw(self.screen)
         self.pipes.draw(self.screen)
         self.floor.draw(self.screen)
-        self.bird.draw(self.screen)
 
-        self.score_text.draw(self.screen, f"score {self.score}", (400, 40), True)   
+        if self.running:
+            self.bird.draw(self.screen)
+            self.score_text.draw(self.screen, f"score {self.score}", (400, 40), True)   
+        else:
+            self.overlay.draw(self.screen)
+
+        
 
 
     def update(self):
-        self.floor.move()
-        self.pipes.move()
-        self.bird.move()
+        # updates all objects
+
+        if self.running:
+            self.floor.move()
+            self.pipes.move()
+            self.bird.move()
 
         if self.pipes.queue[0][0] <= -100:
             self.pipes.delete_pipes()
             self.pipes.create_pipes()
 
         if self.check_collision():
-            pygame.quit()
-            exit()
+            self.running = False
+            self.reset()
 
+        # detect when the bird pass between the pipes and add 1 point to score
         if self.pipes.queue[0][0] == 100:
             self.score += 1
     
 
     def check_collision(self):
+        # check if the bird's rect collided with a pipe
         x = self.pipes.queue[0][0]
         y = self.pipes.queue[0][1]
 
@@ -58,3 +74,13 @@ class Game:
             return True
         else:
             return False
+    
+
+    def reset(self):
+        # reset the game
+        self.pipes.queue.clear()
+        self.pipes.create_pipes(True)
+        self.bird.bird_rect.centery = 450
+        self.score = 0
+
+
