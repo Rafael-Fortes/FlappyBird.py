@@ -5,8 +5,6 @@ from sys import exit
 
 class Game:
     def __init__(self, width, height):
-        # initialize all objects and variables
-
         self.screen = pygame.display.set_mode((width, height))
         self.bg = background.BackGround()
         self.floor = floor.Floor(height-150)
@@ -24,8 +22,6 @@ class Game:
         
 
     def draw(self):
-        # draws all objects
-
         self.bg.draw(self.screen)
         self.pipes.draw(self.screen)
         self.floor.draw(self.screen)
@@ -36,12 +32,8 @@ class Game:
         else:
             self.overlay.draw(self.screen)
 
-        
-
 
     def update(self):
-        # updates all objects
-
         if self.running:
             self.floor.move()
             self.pipes.move()
@@ -55,13 +47,11 @@ class Game:
             self.running = False
             self.reset()
 
-        # detect when the bird pass between the pipes and add 1 point to score
         if self.pipes.queue[0][0] == 100:
             self.score += 1
     
 
     def check_collision(self):
-        # check if the bird's rect collided with a pipe
         x = self.pipes.queue[0][0]
         y = self.pipes.queue[0][1]
 
@@ -77,7 +67,6 @@ class Game:
     
 
     def reset(self):
-        # reset the game
         self.pipes.queue.clear()
         self.pipes.create_pipes(True)
         self.bird.bird_rect.centery = 450

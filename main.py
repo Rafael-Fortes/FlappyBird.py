@@ -3,7 +3,11 @@ from sys import exit
 from src import game
 
 
-game = game.Game(500, 900)
+WIDTH = 500
+HEIGHT = 900
+
+
+game = game.Game(WIDTH, HEIGHT)
 clock = pygame.time.Clock()
 running = True
 
